@@ -33,26 +33,18 @@ try:
 except Exception:
     fw.comment = "$BUILD_URL unset"
 
-fw.fpga_part_number = "altera socfpga"
+fw.fpga_part_number = "7z020"
 fw.num_leds = 4
-fw.board_name = "Terasic DE0-Nano"
+fw.board_name = "Replicookie"
 
+# 25 out of the 40 pins on each header are usable
 c = fw.connector.add()
-c.name = "gpio0.p2"
+c.name = "JA.GPIO1"
 c.pins = 17
 
 c = fw.connector.add()
-c.name = "gpio0.p3"
+c.name = "JA.GPIO2"
 c.pins = 17
-
-c = fw.connector.add()
-c.name = "gpio1.p2"
-c.pins = 17
-
-c = fw.connector.add()
-c.name = "gpio1.p3"
-c.pins = 17
-
 
 # serialize it to a blob
 blob = fw.SerializeToString()
