@@ -78,7 +78,11 @@ char **argv_split(gfp_t gfp, const char *str, int *argcp);
 
 #define DE0_NANO_SOC_ADC_BASE 0x0200
 #define DE0_NANO_SOC_ADC_DATA 0x0204
-#define NUM_ADC_SAMPLES 8
+#define DE0_NANO_NUM_ADC_SAMPLES 8
+
+#define ZYNQ_SOC_ADC_BASE 0x0200
+#define ZYNQ_SOC_ADC_DATA 0x0204
+#define ZYNQ_NUM_ADC_SAMPLES 16
 
 #define HM2_ADDR_IOCOOKIE  (0x0100)
 #define HM2_IOCOOKIE       (0x55AACAFE)
@@ -1082,10 +1086,23 @@ typedef struct {
         struct {
             hal_u32_t *status_set_reg;
             hal_u32_t *num_samples_reg;
-            hal_u32_t *sample[NUM_ADC_SAMPLES];
+            hal_u32_t *sample[DE0_NANO_NUM_ADC_SAMPLES];
         } pin;
     } hal;
 } de0_nano_soc_adc_t;
+
+//
+// zynq adc access
+//
+typedef struct {
+    struct {
+        struct {
+            hal_u32_t *status_set_reg;
+            hal_u32_t *num_samples_reg;
+            hal_u32_t *sample[ZYNQ_NUM_ADC_SAMPLES];
+        } pin;
+    } hal;
+} zynq_soc_adc_t;
 
 
 //
@@ -1221,6 +1238,7 @@ typedef struct {
     hm2_fwid_t fwid;
     hm2_raw_t *raw;
     de0_nano_soc_adc_t *nano_soc_adc;
+    zynq_soc_adc_t *zynq_soc_adc;
     hm2_capsense_t capsense;
 
     struct list_head list;
@@ -1233,6 +1251,9 @@ typedef struct {
 
 void de0_nano_soc_adc_read(hostmot2_t *hm2);
 void de0_nano_soc_adc_write(hostmot2_t *hm2);
+
+void zynq_soc_adc_read(hostmot2_t *hm2);
+void zynq_soc_adc_write(hostmot2_t *hm2);
 
 // this one just returns TRUE if the MD is good, FALSE if not
 int hm2_md_is_consistent(
@@ -1536,6 +1557,7 @@ void hm2_raw_write(hostmot2_t *hm2);
 
 int hm2_adc_setup(hostmot2_t *hm2);
 void de0_nano_soc_adc_read(hostmot2_t *hm2);
+void zynq_soc_adc_read(hostmot2_t *hm2);
 
 
 //
