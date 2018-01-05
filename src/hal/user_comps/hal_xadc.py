@@ -51,6 +51,7 @@ import sys
 import time
 
 import hal
+from fdm.r2temp import R2Temp
 
 # CRAMPS board:  A voltage divider is formed by a pull-up resistor,
 # tied to 1.8V VDD_ADC, and thermistor, tied to ground.  The ADC
@@ -123,12 +124,12 @@ def adc2Temp(pin):
 
 
 def getHalName(pin):
-    return "ch-" + '{0:02d}'.format(pin.pin)
+    return pin.pin
 
 
 def checkAdcInput(pin):
     syspath = '/sys/bus/iio/devices/iio:device0/'
-    tempName = glob.glob(syspath + 'in_voltage' + pin.pin + '_raw')
+    tempName = glob.glob(syspath + '*' + pin.pin + '_raw')
     pin.filename = tempName[0]
     try:
         if len(pin.filename) > 0:
@@ -166,12 +167,9 @@ if (args.channels != ""):
     channelsRaw = args.channels.split(',')
     for channel in channelsRaw:
         pinRaw = channel.split(':')
-        if (len(pinRaw) != 2):
-            print(("wrong input"))
-            sys.exit(1)
         pin = Pin()
-        pin.pin = int(pinRaw[0])
-        if ((pin.pin > 5) or (pin.pin < 0)):
+        pin.pin = pinRaw[0]
+        if (pin.pin == ""):
             print(("Pin not available"))
             sys.exit(1)
         checkAdcInput(pin)
