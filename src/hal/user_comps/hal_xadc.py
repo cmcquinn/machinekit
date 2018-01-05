@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 # encoding: utf-8
 
 ########################################################################
@@ -114,10 +114,10 @@ class Pin:
 
 
 def adc2Temp(pin):
-    if(args.cape_board == 'Replicookie'):
+    if(args.baseboard == 'Replicookie'):
         R = adc2r_replicookie(pin)
     else:
-        print("Invalid -b cape  name: %s" % args.cape_board)
+        print("Invalid -b cape  name: %s" % args.baseboard)
         print("Valid names are: Replicookie")
         sys.exit(1)
     return round(pin.r2temp.r2t(R) * 10.0) / 10.0
